@@ -1,0 +1,76 @@
+                      FELyX README FILE
+=======================================================================
+         check for latest news at http://felyx.sourceforge.net/
+=======================================================================
+
+Welcome to FELyX, the Finite Element Library Experiment.
+
+In case of any problem, please e-mail us at
+felyx-develop@lists.sourceforge.net. 
+
+==================================================================
+                      BUILDING FELyX
+==================================================================
+The basic installation procedure:
+
+### There are two ways to get the sources:
+	- Download the latest release from sourceforge and unzip it with
+      	  $ gunzip felyx-*.tar.gz
+      	  $ tar -xvf felyx-*.tar
+    
+	- Checkout a copy from the CVS repository on sourceforge as described 
+      	  there. (The module to checkout is called "felyx".)
+
+### Then go to the felyx directory.
+
+### Configure FELyX for your system:
+    
+	$ ./configure
+
+  	Custom options for configure:
+  
+  	--enable-floats         Specify floating point type that is used (Default
+        	                  double)
+  	--disable-felyx-exceptions
+                          Specify whether FELyX (and MTL) exceptions should be
+                          thrown (Default enabled)
+  	--with-blas=DIR       root directory of blas installation
+  	--with-blas-include=DIR        specify exact include dir for blas headers
+  	--with-blas-libdir=DIR         specify exact library dir for blas library
+  	--without-blas                 disables blas usage completely
+  	--with-boost=PATH       absolute path name where the Boost C++ libraries
+                          	reside, or `int', for internal library.
+                          	Alternatively, the BOOST_ROOT environment variable
+                          	will be used
+
+### Compilation of the library
+        $ make
+
+==================================================================
+                      INSTALLING MKL LIBRARIES
+==================================================================
+Install MKL as documented by the library itself
+
+Add two variables to /etc/profile.local:
+export CPLUS_INCLUDE_PATH=/opt/intel/mkl721/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=/opt/intel/mkl721/lib/32:$LIBRARY_PATH
+
+Add lib path to /etc/ld.so.conf
+/opt/intel/mkl721/lib/32
+
+Run ldconfig to update the linker cache
+
+Make sure that the profile is read (i.e. by a new login)
+
+Run configure as desribed above, watch for "found MKL" messages
+
+===================================================================
+                      FILENAME CONVENTIONS
+===================================================================
+*.mac		Ansys APDL macros to generate models in Ansys.
+*.ansys		Model files generated from Ansys; to be read from FELyX.
+*.ansysres	Result files generated from Ansys, storing displacement of nodes.
+*.ansysnew	Ansys database generated from FELyX, in order to reread the model
+		into Ansys.
+*.felyx		Model files generated from FELyX in some kind of "native" format.
+*.felyxres	Result files generated from FELyX, storing displacement of nodes.

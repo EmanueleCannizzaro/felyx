@@ -1,0 +1,26 @@
+# Ducati frame Tube properties
+# 3TubesStringList
+
+# 3 Tube types are defined with r and t
+12.5000                1.5000
+9.50000                1.5000
+6.75000                1.5000
+
+# They are applied to the 15 tubes in the frame
+# as defined by the following indices
+tt0     
+tt1   
+tt0   
+tt1  
+tt1  
+tt1  
+tt1  
+tt1  
+tt2  
+tt0  
+tt2  
+tt1  
+tt1  
+tt1  
+tt0  
+  

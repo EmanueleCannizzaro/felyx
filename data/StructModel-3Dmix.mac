@@ -1,0 +1,199 @@
+! *********************************************************
+! *** FELyX TEST INPUT FILES				***
+! *** Authors: Structures Technologies ETH Zurich	***
+! *** Date: November 2001				***
+! *********************************************************
+
+! Test input file consisting of all 3D element types implemented
+
+FINISH
+/CLEAR,START
+
+! Variables
+l     = 80
+h     = 30
+ename = '3Dmix'
+fname = 'model'
+F     = -10000
+tetesize = 20
+hexesize = 16.5
+
+/PREP7  
+! Element Type
+ET,8,LINK8 
+ET,187,SOLID187
+ET,4,BEAM4
+ET,93,SHELL93
+ET,185,SOLID185
+ET,186,SOLID186
+
+! Materials
+MPTEMP,,,,,,,,  
+MPTEMP,1,0  
+MPDATA,EX,1,,70000 
+MPDATA,PRXY,1,,0.3  
+
+MPTEMP,,,,,,,,  
+MPTEMP,1,0  
+MPDATA,EX,2,,210000 
+MPDATA,PRXY,2,,0.3  
+
+! Real Constants
+R,1,60,
+R,2,10,200,100,5,7,35,  
+RMORE, ,300, , , , ,
+R,4,2
+
+~PARAIN,'%fname%-%ename%',x_t,,SOLIDS,0,0 
+/RESET  
+VLSCAL,ALL, , ,1000,1000,1000, ,0,1
+ALLS
+NUMMRG,KP,0.001, , ,LOW 
+
+VSEL,S,,,1,3,1
+VSEL,A,,,7,9,1
+ASLV,S
+VDELE,ALL
+ADELE,ALL
+
+ALLS
+! MESH LINKS
+LSEL,NONE   
+LSTR,10,100
+LSTR,52,99
+LSTR,64,101
+LSTR,16,103
+LSTR,58,102
+LSTR,4,98
+CM,l-link,LINE
+LATT,2,1,8, , , ,   
+LESIZE,ALL, , ,1, , , , ,1  
+LMESH,ALL
+/COLOR,ELEM,RED
+
+! General element Mesh size
+ESIZE,tetesize
+ESEL,NONE
+! SELECT BEAMS
+LSEL,S,,,14
+LSEL,A,,,12
+LSEL,A,,,75
+LSEL,A,,,77
+LSEL,A,,,17
+LSEL,A,,,3
+LSEL,A,,,5
+LSEL,A,,,84
+LSEL,A,,,86
+LSEL,A,,,8
+LSEL,A,,,23
+LSEL,A,,,21
+LSEL,A,,,93
+LSEL,A,,,95
+LSEL,A,,,19
+LATT,2,2,4, , , ,   
+LMESH,ALL
+/COLOR,ELEM,DGRA
+ALLS
+
+ESEL,NONE
+ESIZE,hexesize
+VSEL,S,,,4,12,8
+VATT,       1,       1, 185,       0
+VSWEEP,ALL
+/COLOR,ELEM,ORAN
+
+ESEL,NONE
+VSEL,S,,,5,10,5
+VATT,       1,       1, 186,       0
+VSWEEP,ALL
+/COLOR,ELEM,BLUE
+
+ESEL,NONE
+ESIZE,tetesize
+VSEL,S,,,13
+VATT,       1,       1, 187,       0
+MSHAPE,1,3D 
+MSHKEY,0
+VMESH,ALL
+/COLOR,ELEM,GREEN
+
+ESEL,NONE
+ESIZE,hexesize
+VSEL,S,,,6,11,5
+ASLV,S
+ASEL,U,,,33
+ASEL,U,,,62
+ASEL,U,,,31
+ASEL,U,,,60
+ASEL,U,,,36
+AATT,       2,       4, 93,       0
+MSHAPE,0,2D 
+MSHKEY,1
+AMESH,ALL
+/COLOR,ELEM,BMAG
+
+ALLS
+NUMMRG,NODE,0.001, , ,LOW   
+*GET,nele,ELEM,0,COUNT
+
+! Boundary Conditions
+
+ASEL,S,,,33
+ASEL,A,,,62
+ASEL,A,,,26
+ASEL,A,,,55
+ASEL,A,,,19
+ASEL,A,,,69
+LSLA,S
+LSEL,U,,,43
+LSEL,U,,,58
+LSEL,U,,,28
+DL,ALL, ,UX,0
+DL,ALL, ,UY,0
+DL,ALL, ,UZ,0
+
+KSEL,S,,,97
+DK,ALL,,0,,0,UX,UY
+FK,ALL,FZ,F
+
+! Rotate node where force is applied
+NSLK,S
+n=NDNEXT(0)
+NMODIF,n, , , ,30,30,30,  
+
+! Transfer Loads from solid model to FE
+ALLS
+SBCTRAN
+
+
+
+! Set title 
+/TITLE, %fname% for %ename% with %nele% elements - IMES-ST@ETHZ.CH
+
+! Write Archive File to be read by Toolbox
+CDWRITE,DB, '%fname%-%ename%-%nele%e',ansys
+
+EPLO
+
+! SOLVE
+FINISH
+/SOLU
+EQSLV,SPARSE
+/STATUS,SOLU
+
+SOLVE   
+
+FINISH
+
+/POST1  
+RSYS,SOLU   
+/PAGE,1e6,,1e6,,
+SET,LAST
+/OUTPUT,'%fname%-%ename%-%nele%e',ansysres
+PRNSOL,DOF, 
+/OUTPUT
+
+
+/ESHAPE,1.0 
+/EFACET,4   
+EPLO

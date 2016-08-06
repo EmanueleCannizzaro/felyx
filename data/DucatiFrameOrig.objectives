@@ -1,0 +1,4 @@
+# Ducati frame analysis: objective values
+mass              = 7.40774
+torsion_stiffness = 1313.86
+max_stress        = 451.156

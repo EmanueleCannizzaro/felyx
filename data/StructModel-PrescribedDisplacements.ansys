@@ -1,0 +1,125 @@
+/COM,ANSYS RELEASE  9.0A1  UP20050128       10:49:04    04/27/2005
+/PREP7
+/NOPR
+/TITLE,                                                                        
+ANTYPE, 0
+*IF,_CDRDOFF,EQ,1,THEN     !if solid model was read in
+_CDRDOFF=             !reset flag, numoffs already performed
+*ELSE              !offset database for the following FE model
+NUMOFF,NODE,       8
+NUMOFF,ELEM,      13
+NUMOFF,MAT ,       1
+NUMOFF,REAL,       1
+NUMOFF,TYPE,       1
+*ENDIF
+*SET,_BUTTON ,  0.000000000000    
+*SET,_ET_NEXT,  2.000000000000    
+*SET,_ET_TYPE,  1.000000000000    
+*SET,_GUI_CLR_BG,' systemButtonFace               '
+*SET,_GUI_CLR_FG,' systemButtonText               '
+*SET,_GUI_CLR_INFOBG,' systemInfoBackground           '
+*SET,_GUI_CLR_SEL,' systemHighlight                '
+*SET,_GUI_CLR_SELBG,' systemHighlight                '
+*SET,_GUI_CLR_SELFG,' systemHighlightText            '
+*SET,_GUI_CLR_WIN,' systemWindow                   '
+*SET,_GUI_FNT_FMLY,'Arial                           '
+*SET,_GUI_FNT_PXLS,  16.00000000000    
+*SET,_GUI_FNT_SLNT,'r                               '
+*SET,_GUI_FNT_WEGT,'medium                          '
+*SET,_RC_SET ,  1.000000000000    
+*SET,_RETURN ,  0.000000000000    
+*SET,_STATUS ,  1.000000000000    
+*SET,_UIQR   ,  0.000000000000    
+*SET,_Z1     ,  0.000000000000    
+*SET,_Z10    ,'Nodes                           '
+*SET,_Z11    ,'XXX                             '
+*SET,_Z7     ,'D                               '
+*SET,_Z9     ,'U,ROT                           '
+DOF,DELETE
+ET,       1,  4
+RLBLOCK,       1,       1,      12,       7
+(2i8,6g16.9)
+(7g16.9)
+       1       8  10.0000000      100.000000      100.000000      0.00000000      0.00000000      0.00000000    
+  0.00000000      200.000000    
+NBLOCK,6,SOLID
+(3i8,6e16.9)
+       1       0       0  0.00000000    
+       2       0       0  500.000000    
+       3       0       0  500.000000      500.000000    
+       4       0       0  0.00000000      500.000000    
+       5       0       0  0.00000000      0.00000000      100.000000    
+       6       0       0  500.000000      0.00000000      100.000000    
+       7       0       0  500.000000      500.000000      100.000000    
+       8       0       0  0.00000000      500.000000      100.000000    
+N,R5.3,LOC,     -1,
+EBLOCK,19,SOLID,      13
+(19i8)
+       1       1       1       1       0       0       0       0       2       0       1       1       2
+       1       1       1       1       0       0       0       0       2       0       2       2       3
+       1       1       1       1       0       0       0       0       2       0       3       3       4
+       1       1       1       1       0       0       0       0       2       0       4       4       1
+       1       1       1       1       0       0       0       0       2       0       5       1       5
+       1       1       1       1       0       0       0       0       2       0       6       2       6
+       1       1       1       1       0       0       0       0       2       0       7       3       7
+       1       1       1       1       0       0       0       0       2       0       8       4       8
+       1       1       1       1       0       0       0       0       2       0       9       5       6
+       1       1       1       1       0       0       0       0       2       0      10       6       7
+       1       1       1       1       0       0       0       0       2       0      11       7       8
+       1       1       1       1       0       0       0       0       2       0      12       8       5
+       1       1       1       1       0       0       0       0       2       0      13       8       2
+      -1
+MPTEMP,R5.0, 1, 1,  0.00000000    ,
+MPDATA,R5.0, 1,EX  ,       1, 1,  210000.000    ,
+MPTEMP,R5.0, 1, 1,  0.00000000    ,
+MPDATA,R5.0, 1,NUXY,       1, 1, 0.300000000    ,
+MPTEMP,R5.0, 1, 1,  0.00000000    ,
+MPDATA,R5.0, 1,PRXY,       1, 1, 0.300000000    ,
+EXTOPT,ATTR,  0,  0,  0
+EXTOPT,ESIZE,  0,  0.0000    
+EXTOPT,ACLEAR,  0
+BFUNIF,TEMP,_TINY
+
+KUSE,     0
+TIME,  0.00000000
+TREF,  0.00000000
+ALPHAD,  0.00000000
+BETAD,  0.00000000
+DMPRAT,  0.00000000
+
+
+
+
+
+CRPLIM, 0.100000000    ,   0
+CRPLIM,  0.00000000    ,   1
+NCNV,     1,  0.00000000    ,     0,  0.00000000    ,  0.00000000
+
+NEQIT,     0
+
+ERESX,DEFA
+ACEL,  0.00000000    ,  0.00000000    ,  0.00000000
+OMEGA,  0.00000000    ,  0.00000000    ,  0.00000000    ,     0
+DOMEGA,  0.00000000    ,  0.00000000    ,  0.00000000
+CGLOC,  0.00000000    ,  0.00000000    ,  0.00000000
+CGOMEGA,  0.00000000    ,  0.00000000    ,  0.00000000
+DCGOMG,  0.00000000    ,  0.00000000    ,  0.00000000
+IRLF,  0
+
+D,      1,UX  ,  0.00000000    ,  0.00000000    
+D,      1,UY  ,  0.00000000    ,  0.00000000    
+D,      1,UZ  ,  0.00000000    ,  0.00000000    
+D,      3,UX  ,  25.0000000    ,  0.00000000    
+D,      3,UY  ,  25.0000000    ,  0.00000000    
+D,      3,UZ  ,  25.0000000    ,  0.00000000    
+D,      4,UX  ,  0.00000000    ,  0.00000000    
+D,      4,UY  ,  0.00000000    ,  0.00000000    
+D,      4,UZ  ,  0.00000000    ,  0.00000000    
+D,      6,UX  ,  25.0000000    ,  0.00000000    
+D,      6,UY  ,  25.0000000    ,  0.00000000    
+D,      6,UZ  ,  25.0000000    ,  0.00000000    
+D,      8,UX  ,  0.00000000    ,  0.00000000    
+D,      8,UY  ,  0.00000000    ,  0.00000000    
+D,      8,UZ  ,  0.00000000    ,  0.00000000    
+/GO
+FINISH

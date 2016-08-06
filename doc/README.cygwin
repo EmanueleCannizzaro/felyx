@@ -1,0 +1,43 @@
+
+
+CYGWIN specific installation instructions - uncomplete!
+-------------------------------------------------------
+O.Koenig Feb 2005
+
+
+------------------
+BOOST installation
+------------------
+Detailed instructions for installing BOOST on
+a Windows/Cygwin/GCC system can be found on 
+http://www.boost.org/more/getting_started.html
+
+Step-by-Step procedure:
+
+  - Download latest Boost release (1.32)  
+
+  - Download Boost Build environment: Boost.Jam
+    Use a prebuilt binary from the sourceforge project page (*.zip file)
+    --> The bjam.exe file is needed for the boost installation
+
+  - Go to the downloaded Boost base directory
+
+  - Run 
+    $ bjam "-sTOOLS=gcc" install
+
+  - Boost gets installed into c:\Boost per default
+
+  - Modify Windows environment variables
+    - Add "C:\Boost\include\boost-1_32" to the variable INCLUDE
+    - Add "C:\Boost\lib" to the variable PATH
+
+
+-----------------
+Running configure  
+-----------------
+Run configure with the specification of the BOOST root directory:
+$ configure --with-boost=/c/Boost
+
+
+-------------------------------------------------------------------------
+
