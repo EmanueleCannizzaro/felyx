@@ -1,0 +1,147 @@
+// -*- mode: c++; 
+
+// -----------------------------------------------------------
+// Following new files are used with mtl
+// -----------------------------------------------------------
+
+// 1) NEW FILE: mtl/mtl_felyx_utils.h 
+//	Sums up all typedefs, shortcuts
+//    	and additional functions that are used in FELyX
+
+// 2) FILES in directory mtl-specializations
+// 	Code from Trevor Blackwell: http://tlb.org/software.html
+//	Solves compile problems of gcc for dense matrix multiplications
+// 	using explicit template specialization
+//	--> These specializations are compile to a small library "libmtl.a"
+
+// 3) MAKEFILES: new makefiles are needed to compile mtl specializations
+
+// -----------------------------------------------------------
+// The following modifications to MTL files are made, in order 
+// to use the envelope storage format in FELyX
+// -----------------------------------------------------------
+// O.Koenig, Mai 2002
+
+// --------------------------
+// IN FILE:  mtl/envelope2d.h
+// --------------------------
+
+// INSERT NEW CONSTRUCTOR IN CLASS:	envelope2d :
+// --------------------------------
+// Constructor of okoenig to initialize envelope  matrix
+// using the initialize_nzstruct function
+template <class Array> inline
+envelope2D( const Array& _rowlengths , size_type _nnz )
+  : dim ( _rowlengths.size(), _rowlengths.size() ),
+    ptr ( _rowlengths.size(), size_type(0)       )
+{
+  initialize_nzstruct( _rowlengths, _nnz );
+}
+
+// REPLACE LINE IN FUNCTION:		envelope2d::initialize_nzstruct( const Array& a, size_type nnz )
+// ------------------------
+ptr[x] = ptr[x-1] + a[x];   // OLD LINE: ptr[x] = ptr[x-1] + a[x-1]
+
+// INSERT LINE TO CLASS:		envelope2d::vecref
+// ---------------------
+typedef dense1D<size_type> IndexArray;
+
+
+// MODIFY ELEMENT ACCESS FUNCTION:	envelope2d::vecref::operator[](size_type ii)
+// -------------------------------
+// Column index j=ii of matrix access has to be passed to elt_ref
+// as a relative index; meaning index 0 points to first
+// stored value in a certain row
+inline reference operator[](size_type ii) { 
+  return reference(*this, ii+ size() - i - 1);	// ORIG VERSION: return reference(*this, ii ); 
+}
+inline const_reference operator[](size_type ii) const { 
+  return const_reference(*this, ii+ size() - i - 1); // ORIG VERSION: return const_reference(*this,ii); 
+}
+
+// MODIFY ELEMENT ACCESS FUNCTION:	envelope2d::vecref::find(size_type j)
+// -------------------------------
+// Because column index j of matrix access is already
+// transformed from absolute 2D-coordinates to a relative
+// value ( see vec_ref::operator[] ), find function has to
+// be modified as well
+inline iterator find(size_type j) MTL_THROW_ASSERTION {
+  
+  MTL_ASSERT( (j - size() +i +1 ) <= i, "envelope2D::vec_ref::find()");
+  // ORIG VERSION: MTL_ASSERT(j <= i, "envelope2D::vec_ref::find()");
+  
+  if ( j  >=  0 ) {		// ORIG VERSION: if (j >= start_index())
+    return begin() + j;	// ORIG VERSION: return begin() + j + size() - i - 1;
+  } else {
+    return end();
+  }
+}
+inline const_iterator find(size_type j) const MTL_THROW_ASSERTION {
+  MTL_ASSERT( (j -size() +1+ i ) <= i, "envelope2D::vec_ref::find()");
+  // ORIG VERSION: MTL_ASSERT(j <= i, "envelope2D::vec_ref::find()");
+  
+  if ( j >= 0 )				// ORIG VERSION: if (j >= start_index())
+    return const_iterator(__begin(), j ); 	// ORIG VERSION: return const_iterator(__begin(), j + size() - i - 1);
+  else
+    return end();
+}
+
+// -------------------------------------
+// IN FILE:  mtl/matrix_implementation.h
+// -------------------------------------
+
+// INSERT NEW CONSTRUCTOR IN CLASS:	matrix_implementation
+// --------------------------------
+  // Implement envelope constructor
+  // this constructor takes the number of values to store (_nnz)
+  // and an array _rowlengths which contains the number of significant entries
+  // in each row
+  /* First, I introduced a template-function constructor:
+     template <class Array> inline 
+     matrix_implementation( const Array& _rowlengths , size_type _nnz )
+     --> Did interfere with some other constructors... so I had to remove the templating...
+  */
+  inline matrix_implementation( const dense1D<unsigned>& _rowlengths, size_type _nnz )
+    : twod( _rowlengths, _nnz ),
+      indexer ( orien::map( dim_type ( _rowlengths.size(), _rowlengths.size() ) ), 
+     		orien::map( band_type( _rowlengths.size(), 0 ))
+ 		)   
+  {}
+
+// INSERT NEW CONSTRUCTOR IN CLASS:    row_matrix
+// --------------------------------
+  // Implement envelope constructor
+  /* First, I introduced a template-function constructor:
+     template <class Array> inline
+     row_matrix( const Array&_rowlengths , size_type _nnz )
+     --> Did interfere with some other constructors... so I had to remove the templating...
+  */  
+  row_matrix( const dense1D<unsigned>& _rowlengths, size_type _nnz )
+    : Base( _rowlengths, _nnz ) {}
+
+
+// -------------------
+// IN FILE:  mtl/mtl.h
+// -------------------
+
+// AT BEGIN OF FILE:
+// -----------------
+// Cause FELyX uses the boost library AND the mtl library
+// which both define a "limits" file in std namespace,
+// the mtl version is commented here; the boost version of this header
+// is used. The boost version also automatically decides if a local
+// limits file is needed at all...
+#include "boost/limits.hpp"
+//#include "mtl/mtl_limits.h"
+
+// --------------------------
+// IN FILE:  mtl/mtl_config.h
+// --------------------------
+
+// COMMENT OUT FOLLOWING LINES:
+// ---------------------------
+/* Name of package */
+/* #define PACKAGE "mtl" */
+
+/* Version number of package */
+/* #define VERSION "2.1.2-20" */

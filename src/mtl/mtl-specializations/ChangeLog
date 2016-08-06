@@ -1,0 +1,21 @@
+2002-07-25  Trevor Blackwell  <tlb@tlb.org>
+
+	* Makefile, specialize-mtl.py: Fixes to work with Python 2.1
+
+	* specialize-mtl.py:
+	From: Gunter Winkler <gunter.winkler@mathematik.tu-chemnitz.de>
+
+	the routines you provided are really fast. But they do not behave as the
+	  original routines from MTL. MTL::mult(A,B,C) always returns C = C+A*B.
+	To correct this you should change the line '*m3p=tot' to '*m3p+=tot'.
+
+2002-06-27  Trevor Blackwell  <tlb@tlb.org>
+
+	* COPYRIGHT, Makefile, README, specialize-mtl.py:
+	First release
+
+	* Makefile, specialize-mtl.py:
+	Broken out from robot/pb
+
+
+	* Makefile, specialize-mtl.py: New file.
